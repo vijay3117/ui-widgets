@@ -1,0 +1,82 @@
+<div class="row">
+
+  <div class="col-lg-6">
+    <nb-card>
+      <nb-card-header>
+        Grid Sorting
+      </nb-card-header>
+      <nb-card-body>
+        <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+          <div class="example-box" *ngFor="let movie of movies" cdkDrag>{{movie}}</div>
+        </div>
+
+      </nb-card-body>
+    </nb-card>
+  </div>
+
+
+  <div class="col-lg-6">
+    <nb-card>
+      <nb-card-header>
+        Horizontal Drag & Drop
+      </nb-card-header>
+      <nb-card-body>
+
+        <div cdkDropList cdkDropListOrientation="horizontal" class="horizontal-example-list"
+          (cdkDropListDropped)="horizontalDrop($event)">
+          <div class="example-box" *ngFor="let timePeriod of timePeriods" cdkDrag>{{timePeriod}}</div>
+        </div>
+
+
+      </nb-card-body>
+    </nb-card>
+  </div>
+
+
+  <div class="col-lg-12">
+    <nb-card>
+      <nb-card-header>
+          Drag&Drop Boundary
+
+      </nb-card-header>
+      <nb-card-body>
+
+        <div class="example-boundary">
+          <div class="example-boundary-box" cdkDragBoundary=".example-boundary" cdkDrag>
+            I can only be dragged within the dotted container
+          </div>
+        </div>
+
+
+      </nb-card-body>
+    </nb-card>
+  </div>
+
+
+  <div class="col-lg-12">
+    <nb-card>
+      <nb-card-header>Drag&Drop Connected Sorting
+      </nb-card-header>
+      <nb-card-body>
+        <div class="example-container float-left col-lg-6">
+          <h2>To do</h2>
+
+          <div cdkDropList #todoList="cdkDropList" [cdkDropListData]="todo" [cdkDropListConnectedTo]="[doneList]"
+            class="example-list" (cdkDropListDropped)="gridDragDrop($event)">
+            <div class="example-box" *ngFor="let item of todo" cdkDrag>{{item}}</div>
+          </div>
+        </div>
+
+        <div class="example-container float-left col-lg-6">
+          <h2>Done</h2>
+
+          <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="done" [cdkDropListConnectedTo]="[todoList]"
+            class="example-list" (cdkDropListDropped)="gridDragDrop($event)">
+            <div class="example-box" *ngFor="let item of done" cdkDrag>{{item}}</div>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+
+</div>

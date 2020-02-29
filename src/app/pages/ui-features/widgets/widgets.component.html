@@ -1,0 +1,331 @@
+<div class="row">
+
+  <div class="col-lg-12">
+    <nb-card>
+      <nb-card-header>
+        Table
+      </nb-card-header>
+      <nb-card-body>
+        <div class="example-header">
+          <mat-form-field>
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+          </mat-form-field>
+        </div>
+
+        <div class="example-container mat-elevation-z8">
+
+          <mat-table [dataSource]="dataSource" matSort>
+
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+            </ng-container>
+
+            <!-- Progress Column -->
+            <ng-container matColumnDef="progress">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Progress </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.progress}}% </mat-cell>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+            </ng-container>
+
+            <!-- Color Column -->
+            <ng-container matColumnDef="color">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Color </mat-header-cell>
+              <mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;">
+            </mat-row>
+          </mat-table>
+
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+
+
+        <!-- Copyright 2018 Google Inc. All Rights Reserved.
+                Use of this source code is governed by an MIT-style license that
+                can be found in the LICENSE file at http://angular.io/license -->
+
+
+      </nb-card-body>
+    </nb-card>
+  </div>
+
+
+
+  <div class="col-lg-6">
+    <nb-card>
+      <nb-card-header>
+        Stepper Control
+      </nb-card-header>
+      <nb-card-body>
+        <button mat-raised-button (click)="isLinear = !isLinear" id="toggle-linear">
+          {{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}
+        </button>
+        <mat-horizontal-stepper [linear]="isLinear" #stepper>
+          <mat-step [stepControl]="firstFormGroup">
+            <form [formGroup]="firstFormGroup">
+              <ng-template matStepLabel>Fill out your name</ng-template>
+              <mat-form-field>
+                <mat-label>Name</mat-label>
+                <input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>
+              </mat-form-field>
+              <div>
+                <button mat-button matStepperNext>Next</button>
+              </div>
+            </form>
+          </mat-step>
+          <mat-step [stepControl]="secondFormGroup">
+            <form [formGroup]="secondFormGroup">
+              <ng-template matStepLabel>Fill out your address</ng-template>
+              <mat-form-field>
+                <mat-label>Address</mat-label>
+                <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY" required>
+              </mat-form-field>
+              <div>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button matStepperNext>Next</button>
+              </div>
+            </form>
+          </mat-step>
+          <mat-step>
+            <ng-template matStepLabel>Done</ng-template>
+            <p>You are now done.</p>
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-button (click)="stepper.reset()">Reset</button>
+            </div>
+          </mat-step>
+        </mat-horizontal-stepper>
+      </nb-card-body>
+    </nb-card>
+  </div>
+
+
+  <ng-template #content let-modal>
+    <div class="modal-header" ngbAutofocus>
+      <h4 class="modal-title" id="modal-title">Profile deletion</h4>
+      <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p><strong>Are you sure you want to delete <span class="text-primary">"John Doe"</span> profile?</strong></p>
+      <p>All information associated to this user profile will be permanently deleted.
+        <span class="text-danger">This operation can not be undone.</span>
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
+      <button type="button" class="btn btn-danger" (click)="modal.close('Ok click')">Ok</button>
+    </div>
+  </ng-template>
+
+
+
+  <div class="col-lg-6">
+    <nb-card>
+      <nb-card-header>
+        Snack Bar
+      </nb-card-header>
+
+      <nb-card-body>
+        <mat-form-field>
+          <mat-label>Message</mat-label>
+          <input matInput value="Disco party!" #message>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Action</mat-label>
+          <input matInput value="Dance" #action>
+        </mat-form-field>
+
+        <button mat-stroked-button (click)="openSnackBar(message.value, action.value)">Show snack-bar</button>
+      </nb-card-body>
+    </nb-card>
+  </div>
+
+
+
+  <div class="col-lg-6">
+    <nb-card>
+      <nb-card-header>
+        Menus
+      </nb-card-header>
+
+      <nb-card-body>
+        <button mat-button [matMenuTriggerFor]="animals" class="btn btn-default">Animal index</button>
+
+        <mat-menu #animals="matMenu">
+          <button mat-menu-item [matMenuTriggerFor]="vertebrates">Vertebrates</button>
+          <button mat-menu-item [matMenuTriggerFor]="invertebrates">Invertebrates</button>
+        </mat-menu>
+
+        <mat-menu #vertebrates="matMenu">
+          <button mat-menu-item [matMenuTriggerFor]="fish">Fishes</button>
+          <button mat-menu-item [matMenuTriggerFor]="amphibians">Amphibians</button>
+          <button mat-menu-item [matMenuTriggerFor]="reptiles">Reptiles</button>
+          <button mat-menu-item>Birds</button>
+          <button mat-menu-item>Mammals</button>
+        </mat-menu>
+
+        <mat-menu #invertebrates="matMenu">
+          <button mat-menu-item>Insects</button>
+          <button mat-menu-item>Molluscs</button>
+          <button mat-menu-item>Crustaceans</button>
+          <button mat-menu-item>Corals</button>
+          <button mat-menu-item>Arachnids</button>
+          <button mat-menu-item>Velvet worms</button>
+          <button mat-menu-item>Horseshoe crabs</button>
+        </mat-menu>
+
+        <mat-menu #fish="matMenu">
+          <button mat-menu-item>Baikal oilfish</button>
+          <button mat-menu-item>Bala shark</button>
+          <button mat-menu-item>Ballan wrasse</button>
+          <button mat-menu-item>Bamboo shark</button>
+          <button mat-menu-item>Banded killifish</button>
+        </mat-menu>
+
+        <mat-menu #amphibians="matMenu">
+          <button mat-menu-item>Sonoran desert toad</button>
+          <button mat-menu-item>Western toad</button>
+          <button mat-menu-item>Arroyo toad</button>
+          <button mat-menu-item>Yosemite toad</button>
+        </mat-menu>
+
+        <mat-menu #reptiles="matMenu">
+          <button mat-menu-item>Banded Day Gecko</button>
+          <button mat-menu-item>Banded Gila Monster</button>
+          <button mat-menu-item>Black Tree Monitor</button>
+          <button mat-menu-item>Blue Spiny Lizard</button>
+          <button mat-menu-item disabled>Velociraptor</button>
+        </mat-menu>
+
+
+        <button mat-button [matMenuTriggerFor]="aboveMenu">Above</button>
+        <mat-menu #aboveMenu="matMenu" yPosition="above">
+          <button mat-menu-item>Item 1</button>
+          <button mat-menu-item>Item 2</button>
+        </mat-menu>
+
+        <button mat-button [matMenuTriggerFor]="belowMenu">Below</button>
+        <mat-menu #belowMenu="matMenu" yPosition="below">
+          <button mat-menu-item>Item 1</button>
+          <button mat-menu-item>Item 2</button>
+        </mat-menu>
+
+        <button mat-button [matMenuTriggerFor]="beforeMenu">Before</button>
+        <mat-menu #beforeMenu="matMenu" xPosition="before">
+          <button mat-menu-item>Item 1</button>
+          <button mat-menu-item>Item 2</button>
+        </mat-menu>
+
+
+        <button mat-button [matMenuTriggerFor]="afterMenu">After</button>
+        <mat-menu #afterMenu="matMenu" xPosition="after">
+          <button mat-menu-item>Item 1</button>
+          <button mat-menu-item>Item 2</button>
+        </mat-menu>
+
+        <!-- Copyright 2019 Google LLC. All Rights Reserved.
+              Use of this source code is governed by an MIT-style license that
+              can be found in the LICENSE file at http://angular.io/license -->
+      </nb-card-body>
+    </nb-card>
+  </div>
+
+  <div class="col-lg-6">
+    <nb-card>
+      <nb-card-header>
+        Modal window
+      </nb-card-header>
+      <nb-card-body>
+        <button nbbutton="" status="success" type="submit" _nghost-poo-c16="" ng-reflect-status="success"
+          class="appearance-filled size-medium status-success shape-rectangle transitions" aria-disabled="false"
+          tabindex="0" (click)="open(content)">Profile Modal</button>
+      </nb-card-body>
+    </nb-card>
+  </div>
+
+  <div class="col-lg-6">
+    <nb-card>
+      <nb-card-header>
+        Basic expansion panel
+
+      </nb-card-header>
+      <nb-card-body>
+
+        <mat-accordion>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Personal data
+              </mat-panel-title>
+              <mat-panel-description>
+                Type your name and age
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-form-field>
+              <mat-label>First name</mat-label>
+              <input matInput>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Age</mat-label>
+              <input matInput type="number" min="1">
+            </mat-form-field>
+          </mat-expansion-panel>
+          <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Self aware panel
+              </mat-panel-title>
+              <mat-panel-description>
+                Currently I am {{panelOpenState ? 'open' : 'closed'}}
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>I'm visible because I am open</p>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </nb-card-body>
+    </nb-card>
+  </div>
+
+  <div class="col-lg-6">
+    <nb-card>
+      <nb-card-header>
+        Tooltip
+      </nb-card-header>
+      <nb-card-body>
+        <p>You have received a file called "cat-picture.jpeg".</p>
+
+        <mat-form-field class="example-user-input">
+          <mat-label>Tooltip position</mat-label>
+          <mat-select [formControl]="position">
+            <mat-option *ngFor="let positionOption of positionOptions" [value]="positionOption">
+              {{positionOption}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-raised-button matTooltip="Info about the action" [matTooltipPosition]="position.value"
+          aria-label="Button that displays a tooltip in various positions">
+          Action
+        </button>
+
+
+      </nb-card-body>
+    </nb-card>
+  </div>
+
+
+</div>

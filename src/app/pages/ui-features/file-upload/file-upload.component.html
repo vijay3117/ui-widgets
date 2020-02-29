@@ -1,0 +1,210 @@
+<div class="row">
+
+  <div class="col-lg-12">
+    <nb-card>
+      <nb-card-header>
+        File Upload
+      </nb-card-header>
+      <nb-card-body>
+
+
+        <ngfFormData [files]="files" postName="file" [(FormData)]="sendableFormData"></ngfFormData>
+
+        <ngfUploadStatus [(percent)]="progress" [httpEvent]="httpEvent"></ngfUploadStatus>
+
+
+        <div class="inline-block">
+          <h3>Select Files</h3>
+
+          <div class="inline-block file-upload">
+            Choose Multiple File
+            <input ngfSelect multiple type="file" [(files)]="files" [accept]="accept" [maxSize]="maxSize"
+              [(lastInvalids)]="lastInvalids" (filesChange)="lastFileAt=getDate()" />
+          </div>
+
+          <div class="inline-block file-upload" style="margin-left: 55px;">
+            Single File
+            <input ngfSelect type="file" [(files)]="files" [accept]="accept" [maxSize]="maxSize"
+              [(lastInvalids)]="lastInvalids" (filesChange)="lastFileAt=getDate()" />
+          </div>
+
+        </div>
+
+        <hr />
+        <div class="mt-15">
+          <h3>Drop Files</h3>
+          <div class="inline-block">
+            <div ngfDrop [(validDrag)]="baseDropValid" (fileOver)="hasBaseDropZoneOver=$event" [(files)]="files"
+              [accept]="accept" [maxSize]="maxSize" [(dragFiles)]="dragFiles" [(lastInvalids)]="lastInvalids"
+              class="well my-drop-zone" [class.invalid-drag]="baseDropValid===false" [class.valid-drag]="baseDropValid"
+              (filesChange)="lastFileAt=getDate()" [fileDropDisabled]="fileDropDisabled" style="height: 70px;
+              width: 284px;
+              padding: 20px;">
+              Base drop zone
+            </div>
+            <!-- <strong>accept:</strong>
+    <div>
+      <input type="text" [(ngModel)]="accept" />
+    </div> -->
+          </div>
+
+          <div class="inline-block">
+            <div ngfDrop multiple="1" selectable="1" [(validDrag)]="validComboDrag" [(files)]="files" accept="image/*"
+              [maxSize]="maxSize" [(lastInvalids)]="lastInvalids" [(dragFiles)]="dragFiles" class="well my-drop-zone"
+              [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+              (filesChange)="lastFileAt=getDate()" [fileDropDisabled]="fileDropDisabled" style="height: 70px;
+              padding: 20px;
+              margin-left: 123px;">
+              Combo drop/select <strong>image</strong> only zone
+            </div>
+            <!-- <strong>accept:</strong>
+    <div>
+      <input type="text" value="image/*" disabled readonly="" style="width:100%" />
+    </div> -->
+          </div>
+
+          <!-- <div class="inline-block">
+    <strong>maxSize byte</strong>
+    <div>
+      <input type="number" [(ngModel)]="maxSize" placeholder="1024 == 1mb" />
+    </div>
+  </div>
+   -->
+
+        </div>
+
+
+        <div *ngIf="dragFiles">
+          <h3 style="margin:0">Drag Files</h3>
+          <p *ngIf="!dragFiles.length" style="color:red;">
+            This browser does NOT release metadata for files being dragged. All files will be considered valid drags
+            until
+            dropped.
+          </p>
+          <pre>{{ dragFiles | json }}</pre>
+        </div>
+
+        <div class="bg-warning" *ngIf="lastInvalids?.length" style="margin-bottom: 40px">
+          <h3 style="color:red;">Last {{ lastInvalids.length }} Invalid Selected Files</h3>
+
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Error</th>
+                <th>Type</th>
+                <th>Size</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of lastInvalids;let i=index">
+                <td>
+                  <div *ngIf="['image/gif','image/png','image/jpeg'].indexOf(item.file.type)>=0">
+                    <div class="previewIcon" [ngfBackground]="item.File"></div>
+                  </div>
+                  <strong>{{ item.file.name }}</strong>
+                </td>
+                <td nowrap>
+                  {{ item.type }}
+                </td>
+                <td nowrap>
+                  {{ item.file.type }}
+                </td>
+                <td nowrap>
+                  {{ item.file.size/1024/1024 | number:'.2' }} MB
+                </td>
+                <td nowrap>
+
+                  <button type="button" class="btn btn-danger btn-xs" (click)="lastInvalids.splice(i,1)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <hr />
+        <div style="margin-bottom: 40px;margin-top: 15px;">
+          <h3>{{ files.length }} Queued Files</h3>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Size</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of files;let i=index">
+                <td>
+                  <div *ngIf="['image/gif','image/png','image/jpeg'].indexOf(item.type)>=0">
+                    <div class="previewIcon" [ngfBackground]="item"></div>
+                  </div>
+                  <strong>{{ item.name }}</strong>
+                </td>
+                <td nowrap>
+                  {{ item.type }}
+                </td>
+                <td nowrap>
+                  {{ item.size/1024/1024 | number:'.2' }} MB
+                </td>
+                <td nowrap>
+
+                  <button type="button" class="btn btn-danger btn-xs" (click)="files.splice(i,1);clearProogress();">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr style="text-align: center;" *ngIf="!files.length">
+                <td><strong>No Files Found...</strong></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div>
+            <div>
+              <div> Queue progress: </div>
+              <div class="progress" style="margin-top: 16px;">
+                <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': progress + '%' }"></div>
+              </div>
+            </div>
+
+            <ng-container *ngIf="lastFileAt">
+              <p>
+                <strong>Last file(s) selected At:</strong> {{ lastFileAt | date : 'longTime' }}
+              </p>
+            </ng-container>
+
+            <div class="mt-15 upload-btn">
+              <ng-container *ngIf="progress==100">
+                <span style="color:green; margin-right: 24px;"> <i class="glyphicon glyphicon-ok"></i>
+                  &nbsp;Upload Complete</span>
+              </ng-container>
+
+              <button type="button" class="btn btn-success btn-s" (click)="uploadFiles()" [disabled]="!files.length">
+                <i class="fas fa-upload"></i> Upload all
+              </button>
+
+              <button type="button" class="btn btn-warning btn-s" [disabled]="!httpEmitter" (click)="clearProogress()">
+                <i class="fas fa-remove"></i>
+                Cancel all
+              </button>
+
+              <button type="button" class="btn btn-danger btn-s" (click)="files.length=0;progress=0;"
+                [disabled]="!files.length">
+                <i class="fas fa-trash"></i>
+                Remove all
+              </button>
+            </div>
+          </div>
+        </div>
+
+
+      </nb-card-body>
+    </nb-card>
+  </div>
+
+</div>
