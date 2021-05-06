@@ -60,7 +60,7 @@
     "eva-icons": "^1.1.0",
     "font-awesome": "^4.7.0",
     "hammerjs": "^2.0.8",
-    "highcharts": "^8.0.0",
+    "highcharts": "^9.0.0",
     "highcharts-angular": "^2.4.0",
     "html2canvas": "^1.0.0-rc.5",
     "intl": "1.2.5",
